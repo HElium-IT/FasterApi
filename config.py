@@ -1,0 +1,2 @@
+TEMPLATES_FOLDER = "templates"
+DEFAULT_TEMPLATE_TYPE = "base"

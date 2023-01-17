@@ -1,11 +1,10 @@
 import os
 import typer
 from utils import ModifyFileObj, generate_file_from_template, modify_file
+from config import TEMPLATES_FOLDER, DEFAULT_TEMPLATE_TYPE
 
 APP_FOLDER = os.path.join(os.getcwd())
 THIS_FOLDER = os.path.dirname(os.path.realpath(__file__))
-TEMPLATES_FOLDER = "templates"
-DEFAULT_TEMPLATE_TYPE = "base"
 
 app = typer.Typer()
 
