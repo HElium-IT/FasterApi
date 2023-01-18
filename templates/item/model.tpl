@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-
+from uuid import uuid4
 from app.database.base import Base
 
 if TYPE_CHECKING:
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class $$class_name$$(Base):
-    id: int = Column(Integer, primary_key=True, index=True)
+    id: str = Column(String, default=uuid4, primary_key=True, index=True)
     title = Column(String, index=True)
     description = Column(String, index=True)
     

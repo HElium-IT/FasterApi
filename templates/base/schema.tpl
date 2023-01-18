@@ -20,7 +20,7 @@ class $$class_name$$Update($$class_name$$Base):
 
 # Properties shared by models stored in DB
 class $$class_name$$InDBBase($$class_name$$Base):
-    id: int
+    id: str
     name: str
 
     class Config:

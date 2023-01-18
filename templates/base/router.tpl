@@ -42,7 +42,7 @@ def create_$$router_name$$(
 def update_$$router_name$$(
     *,
     db: Session = Depends(deps.get_db),
-    id: int,
+    id: str,
     $$router_name$$_in: schemas.$$class_name$$Update,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
@@ -60,7 +60,7 @@ def update_$$router_name$$(
 def read_$$router_name$$(
     *,
     db: Session = Depends(deps.get_db),
-    id: int,
+    id: str,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """
@@ -76,7 +76,7 @@ def read_$$router_name$$(
 def delete_$$router_name$$(
     *,
     db: Session = Depends(deps.get_db),
-    id: int,
+    id: str,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
     """

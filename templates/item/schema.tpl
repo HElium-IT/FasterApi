@@ -21,9 +21,9 @@ class $$class_name$$Update($$class_name$$Base):
 
 # Properties shared by models stored in DB
 class $$class_name$$InDBBase($$class_name$$Base):
-    id: int
+    id: str
     title: str
-    owner_id: int
+    owner_id: str
 
     class Config:
         orm_mode = True
