@@ -1,5 +1,9 @@
 import os
 import typer
+import inflect
+infl_eng = inflect.engine()
+pluralize = infl_eng.plural
+
 from utils import ModifyFileObj, generate_file_from_template, modify_file
 from config import TEMPLATES_FOLDER, DEFAULT_TEMPLATE_TYPE
 
@@ -21,7 +25,8 @@ def main(ctx: typer.Context):
 
 @app.command()
 def generate_router(router_name: str, class_name: str, output_path: str = None, api_version: str = "v1", auto_import: bool = True, template_type: str = None):
-    new_file_name = f"{router_name}.py"
+    pluralized_router_name = pluralize(router_name)
+    new_file_name = f"{pluralized_router_name}.py"
     if not output_path:
         output_path = os.path.join(
             APP_FOLDER, "api", f"api_{api_version}", "endpoints", new_file_name)
@@ -33,7 +38,8 @@ def generate_router(router_name: str, class_name: str, output_path: str = None, 
         new_file_path=output_path,
         replacements={
             "router_name": router_name,
-            "class_name": class_name
+            "class_name": class_name,
+            "pluralized_router_name": pluralized_router_name,
         }
     )
     if auto_import:
@@ -41,11 +47,11 @@ def generate_router(router_name: str, class_name: str, output_path: str = None, 
             os.path.join(APP_FOLDER, "api", f"api_{api_version}", "api.py"),
             ModifyFileObj(
                 looking_for_string=f"from app.api.api_{api_version}.endpoints",
-                to_add_string=f"from app.api.api_{api_version}.endpoints import {router_name}",
+                to_add_string=f"from app.api.api_{api_version}.endpoints import {pluralized_router_name}",
             ),
             ModifyFileObj(
                 looking_for_string=f"api_router = APIRouter()",
-                to_add_string=f"api_router.include_router({router_name}.router, prefix=\"/{router_name}\", tags=[\"{router_name}\"])",
+                to_add_string=f"api_router.include_router({pluralized_router_name}.router, prefix=\"/{pluralized_router_name}\", tags=[\"{pluralized_router_name}\"])",
             )
         )
 
@@ -103,6 +109,7 @@ def generate_schema(router_name: str, class_name: str, output_path: str = None, 
 
 @app.command()
 def generate_model(router_name: str, class_name: str, output_path: str = None, auto_import: bool = True, template_type: str = None):
+    pluralized_router_name = pluralize(router_name)
     new_file_name = f"{router_name}.py"
     if not output_path:
         output_path = os.path.join(APP_FOLDER, "models", new_file_name)
@@ -113,9 +120,22 @@ def generate_model(router_name: str, class_name: str, output_path: str = None, a
         templates_dir_path=get_templates_dir(template_type),
         new_file_path=output_path,
         replacements={
-            "class_name": class_name
+            "class_name": class_name,
+            "pluralized_router_name": pluralized_router_name,
         }
     )
+    if template_type == "item":
+        modify_file(
+            os.path.join(APP_FOLDER, "models", "user.py"),
+            ModifyFileObj(
+                looking_for_string="if TYPE_CHECKING:",
+                to_add_string=f"    from .{router_name} import {class_name}",
+            ),
+            ModifyFileObj(
+                looking_for_string='items: List["Item"]',
+                to_add_string=f'    {pluralized_router_name}: List["{class_name}"] = relationship("{class_name}", back_populates="owner")'
+            )
+        )
     if auto_import:
         modify_file(
             os.path.join(APP_FOLDER, "models", "__init__.py"),
@@ -124,6 +144,7 @@ def generate_model(router_name: str, class_name: str, output_path: str = None, a
                 to_add_string=f"from .{router_name} import {class_name}",
             )
         )
+        
 
 
 @app.command()

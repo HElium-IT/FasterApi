@@ -10,10 +10,10 @@ if TYPE_CHECKING:
 
 
 class $$class_name$$(Base):
-    id: str = Column(String, default=uuid4, primary_key=True, index=True)
+    id: str = Column(String, default=str(uuid4()), primary_key=True, index=True)
     title = Column(String, index=True)
     description = Column(String, index=True)
     
     owner_id = Column(Integer, ForeignKey("user.id"))
     
-    owner: "User" = relationship("User", back_populates="items")
+    owner: "User" = relationship("User", back_populates="$$pluralized_router_name$$")

@@ -6,6 +6,6 @@ from app.database.base import Base
 
 
 class $$class_name$$(Base):
-    id: str = Column(String, default=uuid4, primary_key=True, index=True)
+    id: str = Column(String, default=str(uuid4()), primary_key=True, index=True)
     name: str = Column(String)
 

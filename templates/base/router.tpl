@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.get("/", response_model=List[schemas.$$class_name$$])
-def read_$$router_name$$s(
+def read_$$pluralized_router_name$$(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
