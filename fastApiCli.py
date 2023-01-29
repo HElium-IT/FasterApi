@@ -1,24 +1,44 @@
 import os
 import subprocess
 import typer
+
 import inflect
 infl_eng = inflect.engine()
 pluralize = infl_eng.plural
 
-from utils import generate_file_from_template, modify_file, get_templates_dir, ModifyFileObj, APP_FOLDER
-from callbacks import on_exception
+from utils import generate_file_from_template, modify_file, get_templates_dir, ModifyFileObj, APP_FOLDER, delete_generated_files, revert_modified_files
+from error_handling_typer import ErrorHandlingTyper
 
-app = typer.Typer()
+app = ErrorHandlingTyper()
+
+
+@app.error_handler(Exception)
+def on_error(e):
+    """
+    This function is called when an error occurs
+    """
+    typer.echo("An error has occurred")
+
+    typer.echo("Deleting generated files...")
+    delete_generated_files()
+
+    typer.echo("Reverting modified files...")
+    revert_modified_files()
+
+    typer.echo("The error was:")
+    typer.echo(e)
+
+    typer.echo("Exiting...")
 
 @app.command()
 def generate_router(router_name: str, class_name: str, output_path: str = None, api_version: str = "v1", auto_import: bool = True, template_type: str = None):
-    pluralized_router_name = pluralize(router_name)
+    pluralized_router_name = pluralize(router_name.split(".")[0])
     new_file_name = f"{pluralized_router_name}.py"
     if not output_path:
         output_path = os.path.join(
             APP_FOLDER, "api", f"api_{api_version}", "endpoints", new_file_name)
     if not output_path.endswith(".py"):
-        output_path = f"{output_path}{os.sep}{new_file_name}"
+        output_path = f"{output_path}{os.sep}{new_file_name}.py"
     generate_file_from_template(
         template_file_name='router.tpl',
         templates_dir_path=get_templates_dir(template_type),
@@ -49,7 +69,7 @@ def generate_crud(router_name: str, class_name: str, output_path: str = None, au
     if not output_path:
         output_path = os.path.join(APP_FOLDER, "crud", new_file_name)
     if not output_path.endswith(".py"):
-        output_path = f"{output_path}{os.sep}{new_file_name}"
+        output_path = f"{output_path}{os.sep}{new_file_name}.py"
     generate_file_from_template(
         template_file_name='crud.tpl',
         templates_dir_path=get_templates_dir(template_type),
@@ -75,7 +95,8 @@ def generate_schema(router_name: str, class_name: str, output_path: str = None, 
     if not output_path:
         output_path = os.path.join(APP_FOLDER, "schemas", new_file_name)
     if not output_path.endswith(".py"):
-        output_path = f"{output_path}{os.sep}{new_file_name}"
+        output_path = f"{output_path}{os.sep}{new_file_name}.py"
+        
     generate_file_from_template(
         template_file_name='schema.tpl',
         templates_dir_path=get_templates_dir(template_type),
@@ -101,7 +122,7 @@ def generate_model(router_name: str, class_name: str, output_path: str = None, a
     if not output_path:
         output_path = os.path.join(APP_FOLDER, "models", new_file_name)
     if not output_path.endswith(".py"):
-        output_path = f"{output_path}{os.sep}{new_file_name}"
+        output_path = f"{output_path}{os.sep}{new_file_name}.py"
     generate_file_from_template(
         template_file_name='model.tpl',
         templates_dir_path=get_templates_dir(template_type),
@@ -143,7 +164,7 @@ def generate_router_test(router_name: str, api_version: str = None, output_path:
         output_path = os.path.join(
             APP_FOLDER, "tests", "api", f"api_{api_version}", new_file_name)
     if not output_path.endswith(".py"):
-        output_path = f"{output_path}{os.sep}{new_file_name}"
+        output_path = f"{output_path}{os.sep}{new_file_name}.py"
     generate_file_from_template(
         template_file_name='test_router.tpl',
         templates_dir_path=get_templates_dir(template_type),
@@ -161,7 +182,7 @@ def generate_crud_test(router_name: str, output_path: str = None, template_type:
     if not output_path:
         output_path = os.path.join(APP_FOLDER, "tests", "crud", new_file_name)
     if not output_path.endswith(".py"):
-        output_path = f"{output_path}{os.sep}{new_file_name}"
+        output_path = f"{output_path}{os.sep}{new_file_name}.py"
     generate_file_from_template(
         template_file_name='test_crud.tpl',
         templates_dir_path=get_templates_dir(template_type),
@@ -179,7 +200,7 @@ def generate_utils_test(router_name: str, class_name: str, output_path: str = No
     if not output_path:
         output_path = os.path.join(APP_FOLDER, "tests", "utils", new_file_name)
     if not output_path.endswith(".py"):
-        output_path = f"{output_path}{os.sep}{new_file_name}"
+        output_path = f"{output_path}{os.sep}{new_file_name}.py"
     generate_file_from_template(
         template_file_name='test_utils.tpl',
         templates_dir_path=get_templates_dir(template_type),
@@ -243,4 +264,4 @@ def generate_bundle_and_tests(router_name: str, class_name: str = None, output_p
 
 
 if __name__ == "__main__":
-    typer.run(app, on_exception=on_exception)
+    app()

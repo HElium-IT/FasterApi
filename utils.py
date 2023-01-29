@@ -3,6 +3,7 @@ import typer
 
 from config import TEMPLATES_FOLDER, DEFAULT_TEMPLATE_TYPE
 THIS_FOLDER = os.path.dirname(os.path.realpath(__file__))
+APP_FOLDER = os.getcwd()
 
 
 generated_file_paths = []
@@ -20,7 +21,7 @@ def delete_generated_files(*args):
             os.remove(file_path)
             typer.echo(f"{file_path} has been deleted.")
 
-modified_files: list[tuple(str, str)] = []
+modified_files = []
 def revert_modified_files():
     """
     > This function reverts the modified files to their original state
