@@ -1,6 +1,36 @@
 import os
 import typer
 
+from config import TEMPLATES_FOLDER, DEFAULT_TEMPLATE_TYPE
+THIS_FOLDER = os.path.dirname(os.path.realpath(__file__))
+
+
+generated_file_paths = []
+def delete_generated_files(*args):
+    """
+    > This function deletes the generated files from the dir_path
+    
+    :param file_names: The names of the files to delete
+    :type file_names: list
+    :param dir_path: The path to the folder where the files are stored
+    :type dir_path: str
+    """
+    for file_path in generated_file_paths:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            typer.echo(f"{file_path} has been deleted.")
+
+modified_files: list[tuple(str, str)] = []
+def revert_modified_files():
+    """
+    > This function reverts the modified files to their original state
+    """
+    for file_path, original_content in modified_files:
+        if os.path.exists(file_path):
+            with open(file_path, "w") as f:
+                f.write(original_content)
+            typer.echo(f"{file_path} has been reverted to its original state.")
+
 def generate_file_from_template(*args, template_file_name: str, new_file_path: str, replacements: dict, env_key_char: str = None, templates_dir_path: str = None):
     """
     > This function takes a template file, replaces the placeholders with the values in the replacements
@@ -35,7 +65,8 @@ def generate_file_from_template(*args, template_file_name: str, new_file_path: s
     with open(os.path.join(new_file_path), 'w') as f:
         f.write(content)
     
-    typer.echo(f"{new_file_path.split(os.sep)[-1]} has been generated and saved in {new_file_path}.")
+    generated_file_paths.append(new_file_path)
+    typer.echo(f"'{new_file_path.split(os.sep)[-1]}' has been generated and saved in '{new_file_path}'.")
 
 
 class ModifyFileObj:
@@ -62,6 +93,7 @@ def modify_file(file_path:str, *args):
 
     with open(file_path, "r+") as f:
         content = f.read()
+        modified_files.append((file_path, content))
         lines = content.splitlines()
         for obj in args:
             if not obj.looking_for_string:
@@ -82,3 +114,7 @@ def modify_file(file_path:str, *args):
         f.seek(0)
         f.write("\n".join(lines))
     typer.echo(f"{file_path} has been modified.")
+
+
+def get_templates_dir(template_type: str = None):
+    return os.path.join(THIS_FOLDER, TEMPLATES_FOLDER, template_type or DEFAULT_TEMPLATE_TYPE)

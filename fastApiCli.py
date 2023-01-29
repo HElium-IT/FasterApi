@@ -1,27 +1,14 @@
 import os
+import subprocess
 import typer
 import inflect
 infl_eng = inflect.engine()
 pluralize = infl_eng.plural
 
-from utils import ModifyFileObj, generate_file_from_template, modify_file
-from config import TEMPLATES_FOLDER, DEFAULT_TEMPLATE_TYPE
-
-APP_FOLDER = os.path.join(os.getcwd())
-THIS_FOLDER = os.path.dirname(os.path.realpath(__file__))
+from utils import generate_file_from_template, modify_file, get_templates_dir, ModifyFileObj, APP_FOLDER
+from callbacks import on_exception
 
 app = typer.Typer()
-
-# add a control to manage exceptions
-
-def get_templates_dir(template_type: str = None):
-    return os.path.join(THIS_FOLDER, TEMPLATES_FOLDER, template_type or DEFAULT_TEMPLATE_TYPE)
-
-@app.callback()
-def main(ctx: typer.Context):
-    ctx.ensure_object(dict)
-    ctx.obj["DEBUG"] = True
-
 
 @app.command()
 def generate_router(router_name: str, class_name: str, output_path: str = None, api_version: str = "v1", auto_import: bool = True, template_type: str = None):
@@ -220,6 +207,15 @@ def generate_tests(router_name: str, class_name: str = None, api_version: str = 
 
 
 @app.command()
+def generate_base():
+    repo_url =  "https://github.com/HElium-IT/fastApiBase.git"
+    repo_name = repo_url.split(os.sep)[-1].split(".")[0]
+    os.chdir(os.getcwd())
+    subprocess.run(["git", "clone", repo_url])
+    print(f"Repository {repo_name} clonato con successo.")
+
+
+@app.command()
 def generate_bundle(router_name: str, class_name: str = None, output_path: str = None, auto_import: bool = True, router: bool = True, model: bool = True, schema: bool = True, crud: bool = True, template_type: str = None):
     if not class_name:
         class_name = router_name.title().replace("_", "")
@@ -247,4 +243,4 @@ def generate_bundle_and_tests(router_name: str, class_name: str = None, output_p
 
 
 if __name__ == "__main__":
-    app()
+    typer.run(app, on_exception=on_exception)
