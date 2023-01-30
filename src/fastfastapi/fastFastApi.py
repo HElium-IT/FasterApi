@@ -237,7 +237,7 @@ def generate_base():
 
 
 @app.command()
-def generate_bundle(router_name: str, class_name: str = None, output_path: str = None, auto_import: bool = True, router: bool = True, model: bool = True, schema: bool = True, crud: bool = True, template_type: str = None):
+def generate_bundle(router_name: str, class_name: str = None, output_path: str = None, auto_import: bool = True, router: bool = True, model: bool = True, schema: bool = True, crud: bool = True, template_type: str = None, tests: bool = True):
     if not class_name:
         class_name = router_name.title().replace("_", "")
 
@@ -254,13 +254,9 @@ def generate_bundle(router_name: str, class_name: str = None, output_path: str =
         generate_crud(router_name=router_name, class_name=class_name,
                       output_path=output_path, auto_import=auto_import, template_type=template_type)
 
-
-@app.command()
-def generate_bundle_and_tests(router_name: str, class_name: str = None, output_path: str = None, api_version: str = None, template_type: str = None):
-    generate_bundle(router_name=router_name, class_name=class_name, output_path=output_path,
-                    auto_import=True, router=True, model=True, schema=True, crud=True, template_type=template_type)
-    generate_tests(router_name=router_name, class_name=class_name, api_version=api_version,
-                   output_path=output_path, router=True, crud=True, template_type=template_type)
+    if tests:
+        generate_tests(router_name=router_name, class_name=class_name,
+                       output_path=output_path, template_type=template_type)
 
 
 if __name__ == "__main__":
