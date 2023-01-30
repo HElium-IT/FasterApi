@@ -1,8 +1,5 @@
 This is a open-source project to speed up fastapi API development.
 
-To install the cli simply run install.bat or install.sh
-To uninstall, run the uninstall.bat or uninstall.sh
-
 To use the cli, go in the "app" folder of your fastapi application
 and run "fastapicli --help" to see what the cli is capable of doing
 
