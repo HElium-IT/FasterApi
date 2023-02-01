@@ -1,14 +1,9 @@
-This is a open-source project to speed up fastapi API development.
+This is a open-source project to speed up fastapi API development. It uses premade app and customizable templates.
 
-To install the cli simply run install.bat or install.sh
-To uninstall, run the uninstall.bat or uninstall.sh
+Project generation: Use "generate-base" command to clone the base of the Api from the repository https://github.com/HElium-IT/fastApiBase
 
-To use the cli, go in the "app" folder of your fastapi application
-and run "fastapicli --help" to see what the cli is capable of doing
+Bundle generation: From the "app" folder of your fastapi application use "generate-bundle" command to generate router, model, schema, crud, and tests; everything is auto-imported in the existing app.
 
-The available templates type are "base" and "item", the default one is "base" template.
-The templates are in the folder /templates/{template_type}.
-The tempaltes are fully editable to satisfy your needs.
+Template types (more will come): base - default template with a simple class with the id property; item - additional template, class with a linked owner who can manage it.
 
-The available templates are based on the fastapi app at the repository:
-...
+The templates are in the folder /templates/{template_type}. The tempaltes are fully editable to satisfy your needs.
