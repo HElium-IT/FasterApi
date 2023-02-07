@@ -4,9 +4,14 @@
 
 ***--REFACTOR:***
 
-Move functions from utils into a new class that will handle files.
+Create a new class for file handling which methods will be an abstraction of the utils function, this will allow the class to be used for other projects; this class will use the options file to manage variables that define the class behaviour.
 
-Refactor modify_file so that it opens file just to read/write and handles the modifications outside the "open" scope.
+Refactor modify_file function so that:
+- opens, reads and closes file;
+- handles the modifications outside the "open" scope;
+- opens, writes and closes file.
+
+Optimize generate_file_from_template function so that it just iterates once over the template content instead of using content.replace() on every argument passed to the function.
 
 ***--FEATURES:***
 
