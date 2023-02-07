@@ -1,14 +1,14 @@
-**--BUGS AND FIXES:
+***--BUGS AND FIXES:***
 
 
 
-**--REFACTOR:
+***--REFACTOR:***
 
 Move functions from utils into a new class that will handle files.
 
 Refactor modify_file so that it opens file just to read/write and handles the modifications outside the "open" scope.
 
-**--FEATURES:
+***--FEATURES:***
 
 Add logging
 
