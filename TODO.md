@@ -24,3 +24,5 @@ Add a function to revert last generation (there is the need to save the generate
 Templates dir will not be handleable for user customization when project will be packaged into a python module.
 
 The cli is working on Windows, but is it working on other operating systems?
+
+The cli is working for python v3.9.13, but is it working for all v3 subversions?
