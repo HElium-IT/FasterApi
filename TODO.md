@@ -1,7 +1,5 @@
 ***--BUGS AND FIXES:***
 
-
-
 ***--REFACTOR:***
 
 Create a new FileHandling class which methods will be an abstraction of the utils functions, this will allow the class to be used for other projects; this class will use an Options class to manage all the variables that define the main class behaviour.
@@ -24,3 +22,5 @@ Add a function to revert last generation (there is the need to save the generate
 ***--NOTES:***
 
 Templates dir will not be handleable for user customization when project will be packaged into a python module.
+
+The cli is working on Windows, but is it working on other operating systems?
