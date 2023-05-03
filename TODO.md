@@ -1,4 +1,8 @@
 ***--BUGS AND FIXES:***
+  FILE: \backend\app\schemas\token.py
+  BUG: sub is not an integer, is a string containing the user_id
+  EFFECT: every request returns 403 Forbidden
+
 
 ***--REFACTOR:***
 
