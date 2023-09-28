@@ -30,7 +30,7 @@ def on_error(e):
 
     typer.echo("Exiting...")
 
-@app.command()
+@app.command(hidden=True, help="This command is used to generate a new router")
 def generate_router(router_name: str, class_name: str, output_path: str = None, api_version: str = "v1", auto_import: bool = True, template_type: str = None):
     pluralized_router_name = pluralize(router_name.split(".")[0])
     new_file_name = f"{pluralized_router_name}.py"
@@ -63,7 +63,7 @@ def generate_router(router_name: str, class_name: str, output_path: str = None, 
         )
 
 
-@app.command()
+@app.command(hidden=True, help="This command is used to generate a new crud")
 def generate_crud(router_name: str, class_name: str, output_path: str = None, auto_import: bool = True, template_type: str = None):
     new_file_name = f"crud_{router_name}.py"
     if not output_path:
@@ -89,7 +89,7 @@ def generate_crud(router_name: str, class_name: str, output_path: str = None, au
         )
 
 
-@app.command()
+@app.command(hidden=True, help="This command is used to generate a new schema")
 def generate_schema(router_name: str, class_name: str, output_path: str = None, auto_import: bool = True, template_type: str = None):
     new_file_name = f"{router_name}.py"
     if not output_path:
@@ -115,7 +115,7 @@ def generate_schema(router_name: str, class_name: str, output_path: str = None, 
         )
 
 
-@app.command()
+@app.command(hidden=True, help="This command is used to generate a new model")
 def generate_model(router_name: str, class_name: str, output_path: str = None, auto_import: bool = True, template_type: str = None):
     pluralized_router_name = pluralize(router_name)
     new_file_name = f"{router_name}.py"
@@ -155,7 +155,7 @@ def generate_model(router_name: str, class_name: str, output_path: str = None, a
         
 
 
-@app.command()
+@app.command(hidden=True, help="This command is used to generate a new test for router")
 def generate_router_test(router_name: str, api_version: str = None, output_path: str = None, template_type: str = None):
     new_file_name = f"test_{router_name}.py"
     if not api_version:
@@ -176,7 +176,7 @@ def generate_router_test(router_name: str, api_version: str = None, output_path:
     )
 
 
-@app.command()
+@app.command(hidden=True, help="This command is used to generate a new test for crud")
 def generate_crud_test(router_name: str, output_path: str = None, template_type: str = None):
     new_file_name = f"test_{router_name}.py"
     if not output_path:
@@ -193,7 +193,7 @@ def generate_crud_test(router_name: str, output_path: str = None, template_type:
     )
 
 
-@app.command()
+@app.command(hidden=True, help="This command is used to generate a new test for utils")
 def generate_utils_test(router_name: str, class_name: str, output_path: str = None, template_type: str = None):
     new_file_name = f"test_{router_name}.py"
 
@@ -212,7 +212,7 @@ def generate_utils_test(router_name: str, class_name: str, output_path: str = No
     )
 
 
-@app.command()
+@app.command(hidden=True, help="This command is used to generate a new test for router/utils and crud")
 def generate_tests(router_name: str, class_name: str = None, api_version: str = None, output_path: str = None, router: bool = True, crud: bool = True, template_type: str = None):
     if not class_name:
         class_name = router_name.title().replace("_", "")
@@ -227,7 +227,7 @@ def generate_tests(router_name: str, class_name: str = None, api_version: str = 
                            output_path=output_path, template_type=template_type)
 
 
-@app.command()
+@app.command(help="This command is used to generate a new fastapi project based on fastApiBase from Helium-IT github repository")
 def generate_base():
     repo_url =  "https://github.com/HElium-IT/fastApiBase.git"
     repo_name = repo_url.split(os.sep)[-1].split(".")[0]
@@ -236,7 +236,7 @@ def generate_base():
     print(f"Repository {repo_name} clonato con successo.")
 
 
-@app.command()
+@app.command(help="This command is used to generate a new bundle (router, model, schema, crud)")
 def generate_bundle(router_name: str, class_name: str = None, output_path: str = None, auto_import: bool = True, router: bool = True, model: bool = True, schema: bool = True, crud: bool = True, template_type: str = None):
     if not class_name:
         class_name = router_name.title().replace("_", "")
@@ -255,7 +255,7 @@ def generate_bundle(router_name: str, class_name: str = None, output_path: str =
                       output_path=output_path, auto_import=auto_import, template_type=template_type)
 
 
-@app.command()
+@app.command(help="This command is used to generate a new bundle (router, model, schema, crud) PLUS tests")
 def generate_bundle_and_tests(router_name: str, class_name: str = None, output_path: str = None, api_version: str = None, template_type: str = None):
     generate_bundle(router_name=router_name, class_name=class_name, output_path=output_path,
                     auto_import=True, router=True, model=True, schema=True, crud=True, template_type=template_type)
