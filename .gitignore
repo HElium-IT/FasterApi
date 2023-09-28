@@ -2,4 +2,11 @@
 
 *pyc
 
+*cfg
+
 .vscode/  # VS Code settings
+
+.venv/  # Virtual environment
+
+.fastApiBase/  # FastAPI base files
+
