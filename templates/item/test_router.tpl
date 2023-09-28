@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.tests.utils.$$router_name$$ import create_random_$$router_name$$
+from app.tests.utils.utils import random_lower_string
 
 def test_create_$$router_name$$(
     client: TestClient, superuser_token_headers: dict, db: Session
