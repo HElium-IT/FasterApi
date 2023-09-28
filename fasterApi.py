@@ -140,8 +140,8 @@ def generate_model(router_name: str, class_name: str, output_path: str = None, a
                 to_add_string=f"    from .{router_name} import {class_name}",
             ),
             ModifyFileObj(
-                looking_for_string='items: List["Item"]',
-                to_add_string=f'    {pluralized_router_name}: List["{class_name}"] = relationship("{class_name}", back_populates="owner")'
+                looking_for_string='items:',
+                to_add_string=f'    {pluralized_router_name} = relationship("{class_name}", back_populates="owner")'
             )
         )
     if auto_import:
