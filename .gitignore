@@ -1,12 +1,12 @@
-.__pycache__/  # Python cache files
+__pycache__/  # Python cache files
 
 *pyc
 
 *cfg
 
-.vscode/  # VS Code settings
+vscode/  # VS Code settings
 
-.venv/  # Virtual environment
+venv/  # Virtual environment
 
-.fastApiBase/  # FastAPI base files
+fastApiBase/  # FastAPI base files
 
